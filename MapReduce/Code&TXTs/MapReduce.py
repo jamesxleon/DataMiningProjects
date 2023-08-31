@@ -3,6 +3,8 @@ from queue import Queue
 from functools import reduce
 import pandas as pd
 import re
+import os
+
 
 def clean_text(file):
     
@@ -29,6 +31,8 @@ def map_reduce(file_name, chunk_size, num_map_nodes, num_reduce_nodes):
 
     # Split the file content into chunks
     chunks = [file_content[i:i+chunk_size] for i in range(0, len(file_content), chunk_size)]
+    
+   
 
     # Create queues for mappers and reducers
     map_input_queue = Queue()
@@ -42,7 +46,7 @@ def map_reduce(file_name, chunk_size, num_map_nodes, num_reduce_nodes):
     # Create and start mapper threads
     map_threads = []
     for i in range(num_map_nodes):
-        t = threading.Thread(target=map_node, args=(map_input_queue, map_output_queue))
+        t = threading.Thread(target=map_node, args=(map_input_queue, map_output_queue, chunk_size))
         map_threads.append(t)
         t.start()
 
@@ -73,15 +77,23 @@ def map_reduce(file_name, chunk_size, num_map_nodes, num_reduce_nodes):
 
     # Combine results from all reducers
     final_result = reduce(chunk_word_combining, reduced_results)
+    
 
     return final_result
 
 # Mapper Node
-def map_node(map_input_queue, map_output_queue):
+def map_node(map_input_queue, map_output_queue,chunk_size):
     while not map_input_queue.empty():
         i, chunk = map_input_queue.get()
         map_output_queue.put(chunk_word_counting(chunk))
-        print("Mapping chunk", i)
+        #Obtain the size of each chunk in mb
+        chunk_size_inbytes = len(chunk.encode('utf-8'))*8
+        chunk_size_tomb = chunk_size_inbytes / (1024 * 1024)
+        
+        print("Mapping chunk", i, "Size:", chunk_size_tomb, "mb")
+        
+        
+        
 
 # Reducer Node
 def reduce_node(map_results, reduce_output_queue):
@@ -125,4 +137,3 @@ if __name__ == "__main__":
     resultDataframe = pd.DataFrame(result.items(), columns=['Word', 'Count'])
 
     print(resultDataframe.head(40))
-
