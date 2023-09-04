@@ -7,7 +7,7 @@ import random
 import json
 
 # Function to simulate random node failure
-def simulate_failure(probability=0.1):
+def simulate_failure(probability=0.01):
     return random.random() < probability
 
 
@@ -118,7 +118,7 @@ class ImprovedCoordinator(Coordinator):
         result = map_function(chunk_file)
         
         # Save intermediate result to file
-        with open(f"/mnt/data/map_output_task_{task_id}.json", "w") as f:
+        with open(f"MapReduce/Code&TXTs/map_output_task_{task_id}.json", "w") as f:
             json.dump(result, f)
             
         self.map_output_queue.put(result)
@@ -133,7 +133,7 @@ class ImprovedCoordinator(Coordinator):
         result = reduce_function(part_map_results)
         
         # Save intermediate result to file
-        with open(f"/mnt/data/reduce_output_task_{task_id}.json", "w") as f:
+        with open(f"MapReduce/Code&TXTs/reduce_output_task_{task_id}.json", "w") as f:
             json.dump(result, f)
             
         self.reduce_output_queue.put(result)
@@ -147,7 +147,8 @@ if __name__ == "__main__":
     small_file_path = 'MapReduce/Code&TXTs/small_file.txt'
 
     # Split the sample file into chunks
-    chunk_files = split_file_into_chunks(file_path)  
+    #chunk_files = split_file_into_chunks(file_path)  
+    chunk_files = split_file_into_chunks(small_file_path, 5*1024)  # Use small file for testing
     chunk_files
 
     # Initialize Improved Coordinator and execute
