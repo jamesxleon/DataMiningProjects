@@ -101,7 +101,7 @@ class Coordinator:
         print("Coordinator: Aggregating final results")
         final_results = reduce_function([self.reduce_output_queue.get() for _ in range(self.num_reduce_nodes)])
         #Save final result to file
-        with open("MapReduce/Code&TXTs/final_output.json", "w") as f:
+        with open("final_output.json", "w") as f:
             json.dump(final_results, f)
 
         print("Coordinator: Completed")
@@ -120,9 +120,22 @@ class ImprovedCoordinator(Coordinator):
         
         print(f"Map Task {task_id} processing {chunk_file}")
         result = map_function(chunk_file)
+        with open(chunk_file, "r") as f:
+            chunk_data = f.read()
+        chunk_size_bytes = len(chunk_data.encode('utf-8'))
+    
+        # Calcular el tamaño en megabits (Mb)
+        chunk_size_mb = chunk_size_bytes * 8 / (1024 * 1024)
+        print("Chunk Size, Mb:", chunk_size_mb)
+    
+        result = map_function(chunk_file)
         
-        # Save intermediate result to file
-        with open(f"MapReduce/Code&TXTs/map_output_task_{task_id}.json", "w") as f:
+        # Agregar el tamaño en megabits al resultado
+        result["chunk_size_mb"] = chunk_size_mb
+    
+         
+        # Save intermediate result to file and data in mb
+        with open(f"map_output_task_{task_id}.json", "w") as f:
             json.dump(result, f)
             
         self.map_output_queue.put(result)
@@ -137,7 +150,7 @@ class ImprovedCoordinator(Coordinator):
         result = reduce_function(part_map_results)
         
         # Save intermediate result to file
-        with open(f"MapReduce/Code&TXTs/reduce_output_task_{task_id}.json", "w") as f:
+        with open(f"reduce_output_task_{task_id}.json", "w") as f:
             json.dump(result, f)
             
         self.reduce_output_queue.put(result)
@@ -153,7 +166,7 @@ class FailureCoordinator(ImprovedCoordinator):
         result = map_function(chunk_file)
         
         # Save intermediate result to file
-        with open(f"MapReduce/Code&TXTs/map_output_task_{task_id}.json", "w") as f:
+        with open(f"map_output_task_{task_id}.json", "w") as f:
             json.dump(result, f)
             
         self.map_output_queue.put(result)
@@ -168,7 +181,7 @@ class FailureCoordinator(ImprovedCoordinator):
         result = reduce_function(part_map_results)
         
         # Save intermediate result to file
-        with open(f"MapReduce/Code&TXTs/reduce_output_task_{task_id}.json", "w") as f:
+        with open(f"reduce_output_task_{task_id}.json", "w") as f:
             json.dump(result, f)
             
         self.reduce_output_queue.put(result)
@@ -217,12 +230,12 @@ class FailureCoordinator(ImprovedCoordinator):
 # Test the function
 if __name__ == "__main__":
 
-    file_path = 'MapReduce/Code&TXTs/large_file.txt'
-    small_file_path = 'MapReduce/Code&TXTs/small_file.txt'
+    file_path = 'large_file.txt'
+    small_file_path = 'small_file.txt'
 
     # Split the sample file into chunks
-    chunk_files = split_file_into_chunks(file_path)  
-    #chunk_files = split_file_into_chunks(small_file_path, 5*1024)  # Use small file for testing
+    #chunk_files = split_file_into_chunks(file_path)  
+    chunk_files = split_file_into_chunks(small_file_path, 5*1024)  # Use small file for testing
 
     # Initialize Improved Coordinator and execute
     #improved_coordinator = ImprovedCoordinator(chunk_files=chunk_files, num_map_nodes=4, num_reduce_nodes=2)
@@ -236,5 +249,3 @@ if __name__ == "__main__":
     final_word_count = failure_coordinator.execute(induce_failure_map=[True, False, False, False], induce_failure_reduce=[False, True])
 
     print(final_word_count.most_common(10) if final_word_count else "Failed due to induced failure")
-    
-
