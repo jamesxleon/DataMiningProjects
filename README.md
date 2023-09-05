@@ -8,7 +8,7 @@
 
 ### GraphCreation Folder
 
-**This is a code to generate a random NxN adjacency matrix (now set to N=10) with a given number of dead ends and spider traps (now set to 6)**
+**This is a code to generate a random NxN adjacency matrix (now set to N=10) with a given number of dead ends and spider traps (now set to 3 for each, a total of 6 traps)**
 
 ## Outcoming Work
 
