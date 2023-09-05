@@ -34,7 +34,7 @@
 - Do the teleportation matrix and save the results
 
 # A Guidance on how to advance within each step is provided in the MatrixProcessing.py file
-**Here's how I'd do each step of the process, btw**
+**Here's how I'd do each step of the process, btw**  
 **Random Walker**
 The idea of a Random Walker is to simulate a random walk through the graph. At each node i, the walker will move to one of its neighbors randomly, as specified by the adjacency matrix.
 
