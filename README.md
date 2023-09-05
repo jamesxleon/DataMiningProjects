@@ -1,6 +1,6 @@
-# Proyecto 1: Word counting using Python
+# Proyecto 2: Page Ranking Simulation
 
-## Parallelism and Distributed computing
+## Power Iterarion & Random Walker
 
 ### Notes:
 
