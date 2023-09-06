@@ -1,5 +1,6 @@
 # ---------------------- Initialization ----------------------
 import pandas as pd
+import random
 
 # Read the adjacency matrix from the CSV file
 read_csv_file_path = '/Users/jamesleon/Documents/GitHub/DataMiningProjects/PageRank/adjacency_matrix.csv'
@@ -8,6 +9,21 @@ adjacency_matrix = pd.read_csv(read_csv_file_path).values
 print(adjacency_matrix)
 
 # Initialize Random Walker
+def random_walker(graph, initialNode, stepsNumber):
+    curentNode = initialNode
+    visits = {nodo: 0 for nodo in graph}
+
+    for _ in range(stepsNumber):
+        visits[curentNode] += 1
+
+        exitLinks, probability = zip(*graph[curentNode])
+        chosenLink = random.choices(exitLinks, probability)[0]
+        curentNode = chosenLink
+
+    total = sum(visits.values())
+    pt = {nodo: visits[nodo] / total for nodo in graph}
+    return pt
+
 # random_walker_state = ...
 
 # Initialize Power Iteration
