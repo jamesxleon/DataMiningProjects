@@ -11,7 +11,7 @@ print(adjacency_matrix)
 # Initialize Random Walker
 def random_walker(graph, initialNode, stepsNumber):
     curentNode = initialNode
-    visits = {nodo: 0 for nodo in graph}
+    visits = {node: 0 for node in graph}
 
     for _ in range(stepsNumber):
         visits[curentNode] += 1
