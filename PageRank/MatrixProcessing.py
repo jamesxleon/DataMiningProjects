@@ -23,9 +23,17 @@ def random_walker(graph, initialNode, stepsNumber):
     total = sum(visits.values())
     pt = {nodo: visits[nodo] / total for nodo in graph}
     return pt
+# Use random_walker example-----
+#input graph
+graph = {
+    'N1': [('N2', 0.9), ('N3', 0.9)],
+    'N2': [('N1', 0.5), ('N3', 0.2)],
+    'N3': [('N1', 0.7), ('N2', 0.4)],
+}
 
-# random_walker_state = ...
-
+probability_vector = random_walker(graph, 'N1', 10000)
+print(probability_vector)
+# Use random_walker example-----
 # Initialize Power Iteration
 # power_iteration_state = ...
 
