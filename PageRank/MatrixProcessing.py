@@ -11,16 +11,22 @@ print(adjacency_matrix)
 # Initialize Random Walker
 def random_walker(graph, initialNode, stepsNumber):
     curentNode = initialNode
+    # Create a dictionary to keep track of visits to each node
+    # Initialized to 0 visits for all nodes.
     visits = {node: 0 for node in graph}
 
     for _ in range(stepsNumber):
+        # Increase the visit counter for the current node by 1.
         visits[curentNode] += 1
-
+        # Get the list of output links and the associated probabilities for the current node.
         exitLinks, probability = zip(*graph[curentNode])
+        # Randomly select an output link based on probabilities and update currentNode to the selected node.
         chosenLink = random.choices(exitLinks, probability)[0]
         curentNode = chosenLink
 
     total = sum(visits.values())
+
+    # Computes the stationary probability vector (pt) by dividing the number of visits to each node by the total number of visits.
     pt = {nodo: visits[nodo] / total for nodo in graph}
     return pt
 # Use random_walker example-----
