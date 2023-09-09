@@ -23,6 +23,18 @@ def random_walker(transitionMatrix, initialState, steps):
     # Calculate the probability distribution based on the visits
     probabilityDistribution = visits / steps  # Calculate the probability of being in each state after simulation.
     return probabilityDistribution
+
+"""
+USE EXAMPLE
+matrix = np.array([
+    [w, x],
+    [y, z]
+])
+
+initialState = 0
+steps = 10000
+probability_distribution = random_walker(matrix, initialState, steps)
+"""
 # Initialize Power Iteration
 # power_iteration_state = ...
 
