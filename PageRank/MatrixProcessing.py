@@ -1,6 +1,7 @@
 # ---------------------- Initialization ----------------------
 import pandas as pd
 import random
+import numpy as np
 
 # Read the adjacency matrix from the CSV file
 read_csv_file_path = '/Users/jamesleon/Documents/GitHub/DataMiningProjects/PageRank/adjacency_matrix.csv'
@@ -9,37 +10,19 @@ adjacency_matrix = pd.read_csv(read_csv_file_path).values
 print(adjacency_matrix)
 
 # Initialize Random Walker
-def random_walker(graph, initialNode, stepsNumber):
-    curentNode = initialNode
-    # Create a dictionary to keep track of visits to each node
-    # Initialized to 0 visits for all nodes.
-    visits = {node: 0 for node in graph}
+def random_walker(transitionMatrix, initialState, steps):
+    currentState = initialState
+    numStates = len(transitionMatrix)
+    visits = np.zeros(numStates, dtype=int)
+    # Get the transition probabilities for the current state, and then choose the next state based on probabilities.
+    for _ in range(steps):
+        visits[currentState] += 1
+        probabilities = transitionMatrix[currentState]
+        currentState = np.random.choice(numStates, p=probabilities)
 
-    for _ in range(stepsNumber):
-        # Increase the visit counter for the current node by 1.
-        visits[curentNode] += 1
-        # Get the list of output links and the associated probabilities for the current node.
-        exitLinks, probability = zip(*graph[curentNode])
-        # Randomly select an output link based on probabilities and update currentNode to the selected node.
-        chosenLink = random.choices(exitLinks, probability)[0]
-        curentNode = chosenLink
-
-    total = sum(visits.values())
-
-    # Computes the stationary probability vector (pt) by dividing the number of visits to each node by the total number of visits.
-    pt = {nodo: visits[nodo] / total for nodo in graph}
-    return pt
-# Use random_walker example-----
-#input graph
-graph = {
-    'N1': [('N2', 0.9), ('N3', 0.9)],
-    'N2': [('N1', 0.5), ('N3', 0.2)],
-    'N3': [('N1', 0.7), ('N2', 0.4)],
-}
-
-probability_vector = random_walker(graph, 'N1', 10000)
-print(probability_vector)
-# Use random_walker example-----
+    # Calculate the probability distribution based on the visits
+    probabilityDistribution = visits / steps  # Calculate the probability of being in each state after simulation.
+    return probabilityDistribution
 # Initialize Power Iteration
 # power_iteration_state = ...
 
