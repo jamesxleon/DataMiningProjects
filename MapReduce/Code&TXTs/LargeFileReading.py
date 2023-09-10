@@ -108,7 +108,7 @@ class Coordinator:
         return final_results
 
 # Function to simulate random node failure
-def simulate_failure(probability=0.01):
+def simulate_failure(probability=0):
     return random.random() < probability
 
 # Improved Coordinator Node with fault tolerance and intermediate result storage
@@ -212,6 +212,44 @@ class FailureCoordinator(ImprovedCoordinator):
         print("Coordinator: Completed")
         return final_results
         
+class FaultTolerantFailureCoordinator(FailureCoordinator):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.map_task_status = [False] * len(self.chunk_files)  # Dynamic size based on number of chunks
+        self.reduce_task_status = [False] * self.num_reduce_nodes
+
+    def execute(self, induce_failure_map=[], induce_failure_reduce=[]):
+        while not all(self.map_task_status):
+            print("Coordinator: Starting Map phase")
+            self.map_nodes = []
+            self.assign_map_tasks(induce_failure_map)
+            for t in self.map_nodes:
+                t.start()
+            for t in self.map_nodes:
+                t.join()
+        
+        # Collect successful map outputs
+        map_results = [self.map_output_queue.get() for status in self.map_task_status if status]
+        
+        while not all(self.reduce_task_status):
+            print("Coordinator: Starting Reduce phase")
+            self.reduce_nodes = []
+            self.assign_reduce_tasks(induce_failure_reduce)
+            for t in self.reduce_nodes:
+                t.start()
+            for t in self.reduce_nodes:
+                t.join()
+        
+        print("Coordinator: Aggregating final results")
+        final_results = reduce_function([self.reduce_output_queue.get() for _ in self.reduce_task_status if _])
+        
+        # Save final result to file
+        with open("final_output.json", "w") as f:
+            json.dump(final_results, f)
+        
+        print("Coordinator: Completed")
+        return final_results
+
 
 
 # Test the function
@@ -222,7 +260,7 @@ if __name__ == "__main__":
 
     # Split the sample file into chunks
     chunk_files = split_file_into_chunks(file_path)  
-    #chunk_files = split_file_into_chunks(small_file_path, 5*1024)  # Use small file for testing
+    #chunk_files = split_file_into_chunks(small_file_path, 15*1024)  # Use small file for testing
 
     # Initialize Improved Coordinator and execute
     #improved_coordinator = ImprovedCoordinator(chunk_files=chunk_files, num_map_nodes=4, num_reduce_nodes=2)
@@ -233,7 +271,10 @@ if __name__ == "__main__":
     # This version of the class handles all the requirements of the pdf
     # We will induce failure in the first map task and the second reduce task for demonstration
     failure_coordinator = FailureCoordinator(chunk_files=chunk_files, num_map_nodes=4, num_reduce_nodes=2)
-    final_word_count = failure_coordinator.execute(induce_failure_map=[True, False, False, False], induce_failure_reduce=[False, True])
+    final_word_count = failure_coordinator.execute(induce_failure_map=[False, False, True, False], induce_failure_reduce=[False, False])
+
+    #fault_tolerant_failure_coordinator = FaultTolerantFailureCoordinator(chunk_files=chunk_files, num_map_nodes=4, num_reduce_nodes=2)
+    #final_word_count = fault_tolerant_failure_coordinator.execute(induce_failure_map=[True, False, False, False], induce_failure_reduce=[True, False])
 
     print(final_word_count.most_common(10) if final_word_count else "Failed due to induced failure")
     
