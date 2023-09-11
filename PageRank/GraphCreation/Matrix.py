@@ -59,6 +59,7 @@ N = 15
 #print(adjacency_matrix, "\n", dead_ends, "\n",spider_traps)
 
 # Write the adjacency matrix to a CSV file
+
 #csv_file_path = '/Users/jamesleon/Documents/GitHub/DataMiningProjects/PageRank/final_matrix.csv'
 #with open(csv_file_path, 'w') as f:
 #    pd.DataFrame(adjacency_matrix).to_csv(csv_file_path, index=False)

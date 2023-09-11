@@ -6,6 +6,7 @@ import random
 
 # Read the adjacency matrix from the CSV file
 read_csv_file_path = "/Users/jamesleon/Documents/GitHub/DataMiningProjects/PageRank/final_matrix.csv"
+
 adjacency_matrix = pd.read_csv(read_csv_file_path).values
 
 # Visualize the graph
@@ -155,11 +156,13 @@ while STATE_PROB_DIFF > CONVERGENCE_THRESHOLD or R_DIFF > CONVERGENCE_TOLERANCE:
 
     # Guardar valores del vector para ver la convergencia
     csv_file_path = "/Users/jamesleon/Documents/GitHub/DataMiningProjects/PageRank/convergence.csv"
+
     with open(csv_file_path, 'w') as f:
         pd.DataFrame(r_values).to_csv(csv_file_path, index=False)
 
 # Guardar la trazabilidad en un archivo JSON
 trace_file_path = "/Users/jamesleon/Documents/GitHub/DataMiningProjects/PageRank/trace.json"
+
 with open(trace_file_path, 'w') as f:
     json.dump(trace_dict, f, indent=4)
 
