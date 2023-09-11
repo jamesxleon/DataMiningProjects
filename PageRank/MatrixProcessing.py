@@ -1,11 +1,11 @@
 # ---------------------- Initialization ----------------------
 import pandas as pd
 import numpy as np
-import random
 import json
+import random 
 
 # Read the adjacency matrix from the CSV file
-read_csv_file_path = '/Users/jamesleon/Documents/GitHub/DataMiningProjects/PageRank/final_matrix.csv'
+read_csv_file_path = "/Users/jamesleon/Documents/GitHub/DataMiningProjects/PageRank/final_matrix.csv"
 adjacency_matrix = pd.read_csv(read_csv_file_path).values
 
 # Visualize the graph
@@ -88,21 +88,54 @@ while STATE_PROB_DIFF > CONVERGENCE_THRESHOLD or R_DIFF > CONVERGENCE_TOLERANCE:
         
     state_probabilities.append(new_state_prob.tolist())
     current_state = next_state
-    
+
+
     # --------------------------- Power Iteration ---------------------------
-    do_teleport = random.choice([True, False])
-    teleport_decisions.append(do_teleport)
-    
-    if do_teleport or any(outlink_sum == 0 for outlink_sum in outlink_sums):
-        teleport_vector = np.full(shape=N, fill_value=1 / N)
-        r_t = (1 - TELEPORT_PROB) * np.dot(stochastic_matrix, r_start) + TELEPORT_PROB * teleport_vector
-    else:
-        r_t = np.dot(stochastic_matrix, r_start)
+    if COUNTER % 100 == 0 and COUNTER != 0 and COUNTER % 500 != 0:
+        print(f"\n=== Iteración {COUNTER} ===")
+        
+        user_input = ""
+
+        while user_input not in ['Y', 'N']:
+            user_input = input("Do you wish to teleport? (Y/N): ").strip().upper()
+            if user_input == 'Y':
+                do_teleport = True
+                print("Teleporting...")
+                print(f"Do teleport: {do_teleport}")
+                print(f"Norma de la diferencia del vector r: {R_DIFF}")
+                print(f"Diferencia en probabilidades de estado: {STATE_PROB_DIFF}")
+                teleport_decisions.append(do_teleport)
+                
+                teleport_vector = np.full(shape=N, fill_value=1 / N)
+                r_t = (1 - TELEPORT_PROB) * np.dot(stochastic_matrix, r_start) + TELEPORT_PROB * teleport_vector
+                                
+            elif user_input == 'N':
+                do_teleport = False
+                print("Teleportion cancelled")
+                r_t = np.dot(stochastic_matrix, r_start)
+                print(f"Do teleport: {do_teleport}")
+                print(f"Norma de la diferencia del vector r: {R_DIFF}")
+                print(f"Diferencia en probabilidades de estado: {STATE_PROB_DIFF}")
+            else:
+                print("Invalid input. Please enter Y or N.")
+
+
+
+    else: 
+        do_teleport = random.choice([True, False])
+        teleport_decisions.append(do_teleport)
+        
+        if do_teleport or any(outlink_sum == 0 for outlink_sum in outlink_sums):
+            teleport_vector = np.full(shape=N, fill_value=1 / N)
+            r_t = (1 - TELEPORT_PROB) * np.dot(stochastic_matrix, r_start) + TELEPORT_PROB * teleport_vector
+        else:
+            r_t = np.dot(stochastic_matrix, r_start)
         
     R_DIFF = np.linalg.norm(r_t - r_start)
     r_start = r_t
     r_values.append(r_t.tolist())
-    
+
+
     # Incrementar CONTADOR
     COUNTER += 1
 
@@ -120,8 +153,13 @@ while STATE_PROB_DIFF > CONVERGENCE_THRESHOLD or R_DIFF > CONVERGENCE_TOLERANCE:
         print(f"Norma de la diferencia del vector r: {R_DIFF}")
         print(f"Diferencia en probabilidades de estado: {STATE_PROB_DIFF}")
 
+    # Guardar valores del vector para ver la convergencia
+    csv_file_path = "/Users/jamesleon/Documents/GitHub/DataMiningProjects/PageRank/convergence.csv"
+    with open(csv_file_path, 'w') as f:
+        pd.DataFrame(r_values).to_csv(csv_file_path, index=False)
+
 # Guardar la trazabilidad en un archivo JSON
-trace_file_path = '/Users/jamesleon/Documents/GitHub/DataMiningProjects/PageRank/trace.json'
+trace_file_path = "/Users/jamesleon/Documents/GitHub/DataMiningProjects/PageRank/trace.json"
 with open(trace_file_path, 'w') as f:
     json.dump(trace_dict, f, indent=4)
 
