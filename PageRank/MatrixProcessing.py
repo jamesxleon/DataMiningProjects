@@ -3,9 +3,13 @@ import pandas as pd
 import numpy as np
 import json
 import random
+from numpy import asarray
+from numpy import savetxt
+
+
 
 # Read the adjacency matrix from the CSV file
-read_csv_file_path = 'C:\\Users\\sebas\\projects\\DataMiningProjects\\PageRank\\final_matrix.csv'
+read_csv_file_path = "C:\\Users\\nicol\\OneDrive\\Desktop\\DataMiningProjects\\PageRank\\final_matrix.csv"
 adjacency_matrix = pd.read_csv(read_csv_file_path).values
 
 # Visualize the graph
@@ -88,7 +92,8 @@ while STATE_PROB_DIFF > CONVERGENCE_THRESHOLD or R_DIFF > CONVERGENCE_TOLERANCE:
         
     state_probabilities.append(new_state_prob.tolist())
     current_state = next_state
-    
+
+
     # --------------------------- Power Iteration ---------------------------
     if COUNTER % 100 == 0 and COUNTER != 0 and COUNTER % 500 != 0:
         print(f"\n=== Iteración {COUNTER} ===")
@@ -116,7 +121,9 @@ while STATE_PROB_DIFF > CONVERGENCE_THRESHOLD or R_DIFF > CONVERGENCE_TOLERANCE:
                 print(f"Diferencia en probabilidades de estado: {STATE_PROB_DIFF}")
             else:
                 print("Invalid input. Please enter Y or N.")
-                
+
+
+
     else: 
         do_teleport = random.choice([True, False])
         teleport_decisions.append(do_teleport)
@@ -130,7 +137,8 @@ while STATE_PROB_DIFF > CONVERGENCE_THRESHOLD or R_DIFF > CONVERGENCE_TOLERANCE:
     R_DIFF = np.linalg.norm(r_t - r_start)
     r_start = r_t
     r_values.append(r_t.tolist())
-    
+
+
     # Incrementar CONTADOR
     COUNTER += 1
 
@@ -148,8 +156,13 @@ while STATE_PROB_DIFF > CONVERGENCE_THRESHOLD or R_DIFF > CONVERGENCE_TOLERANCE:
         print(f"Norma de la diferencia del vector r: {R_DIFF}")
         print(f"Diferencia en probabilidades de estado: {STATE_PROB_DIFF}")
 
+    # Guardar valores del vector para ver la convergencia
+    csv_file_path = "C:\\Users\\nicol\\OneDrive\\Desktop\\DataMiningProjects\\PageRank\\convergence.csv"
+    with open(csv_file_path, 'w') as f:
+        pd.DataFrame(r_values).to_csv(csv_file_path, index=False)
+
 # Guardar la trazabilidad en un archivo JSON
-trace_file_path = "C:\\Users\\sebas\\projects\\DataMiningProjects\PageRank\\trace.json"
+trace_file_path = "C:\\Users\\nicol\\OneDrive\\Desktop\\DataMiningProjects\\PageRank\\final_matrix.csv"
 with open(trace_file_path, 'w') as f:
     json.dump(trace_dict, f, indent=4)
 
