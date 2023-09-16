@@ -250,8 +250,6 @@ class FaultTolerantFailureCoordinator(FailureCoordinator):
         print("Coordinator: Completed")
         return final_results
 
-
-
 # Test the function
 if __name__ == "__main__":
 
