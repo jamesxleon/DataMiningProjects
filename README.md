@@ -3,7 +3,7 @@
 
 ### The work has been divided in sections to be considered as follows:
 
-1. Data Preprocessing (James)
+## 1. Data Preprocessing (James)
 
 **Objective**
 
@@ -16,7 +16,7 @@ To normalize the dataset so that the features are scaled within a specific range
 **Need to know for the defense!**
 - Understanding Min-Max scaling and its effect on the dataset.
 
-2. _**Feature Selection Method: Simulated Annealing + Symmetrical Uncertainty**_ (Nico & Daniel, this will be a real challenge, so le the faith of the gods be with you)
+## 2. _**Feature Selection Method: Simulated Annealing + Symmetrical Uncertainty**_ (Nico & Daniel, this will be a real challenge, so le the faith of the gods be with you)
 
 **Objective**
 
@@ -31,7 +31,7 @@ To implement a feature selection algorithm using Simulated Annealing combined wi
 - Understand the Simulated Annealing algorithm, its parameters, and how it works for optimization problems.
 - Familiarize yourself with the Symmetrical Uncertainty metric and how it measures the relevance of features.
 
-3. Top Five Feature Subsets (Nicky, on this depends the rest of the semester so beware)
+## 3. Top Five Feature Subsets (Nicky, on this depends the rest of the semester so beware)
 
 **Objective**
 
@@ -45,7 +45,7 @@ To identify the top five feature subsets based on their per capita importance.
 **Need to know for the defense!**
 - Understand the concept of per capita importance and how to calculate it.
 
-4. AUC Score-based Ranking (Sebas, this one should be pretty easy actually, so you owe us one)
+## 4. AUC Score-based Ranking (Sebas, this one should be pretty easy actually, so you owe us one)
 
 **Objective**
 
@@ -59,7 +59,7 @@ To rank the top five feature subsets based on their AUC (Area Under the Curve) s
 - Understanding the AUC metric and how it is used to evaluate classification models.
 - Familiarize yourself with ROC (Receiver Operating Characteristic) curves.
 
-5. Interpretation and Conclusion (James)
+## 5. Interpretation and Conclusion (James)
 
 **Objective**
 
