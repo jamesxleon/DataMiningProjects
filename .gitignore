@@ -1,3 +1,6 @@
-*.txt
-*.json
-*.zip
+**/*.txt
+**/*.json
+**/*.zip
+**/*.csv
+**/*.rar
+TF-IDF/data/*
