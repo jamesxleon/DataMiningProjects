@@ -1,5 +1,6 @@
-# Auto detect text files and perform LF normalization
-* text=auto
-*.txt
-*.json
-*.zip
+**/*.txt
+**/*.json
+**/*.zip
+**/*.csv
+**/*.rar
+TF-IDF/data/*

@@ -46,24 +46,25 @@ def visualize_adjacency_matrix(adjacency_matrix):
 
 # Initialize graph parameters
 N = 15
-adjacency_matrix = np.zeros((N, N), dtype=int)
+#adjacency_matrix = np.zeros((N, N), dtype=int)
 
 # Generate the adjacency matrix
-dead_ends = add_dead_ends(adjacency_matrix, 2)
-spider_traps = add_complex_spider_traps(adjacency_matrix, 1, dead_ends)
-fill_remaining(adjacency_matrix, dead_ends, [node for trap_set in spider_traps for node in trap_set])
+#dead_ends = add_dead_ends(adjacency_matrix, 2)
+#spider_traps = add_complex_spider_traps(adjacency_matrix, 1, dead_ends)
+#fill_remaining(adjacency_matrix, dead_ends, [node for trap_set in spider_traps for node in trap_set])
 
 # Visualize the graph
-visualize_adjacency_matrix(adjacency_matrix)
+#visualize_adjacency_matrix(adjacency_matrix)
 
-print(adjacency_matrix, "\n", dead_ends, "\n",spider_traps)
+#print(adjacency_matrix, "\n", dead_ends, "\n",spider_traps)
 
 # Write the adjacency matrix to a CSV file
-csv_file_path = "C:\\Users\\sebas\\projects\\DataMiningProjects\\PageRank\\final_matrix.csv"
-with open(csv_file_path, 'w') as f:
-    pd.DataFrame(adjacency_matrix).to_csv(csv_file_path, index=False)
+
+#csv_file_path = '/Users/jamesleon/Documents/GitHub/DataMiningProjects/PageRank/final_matrix.csv'
+#with open(csv_file_path, 'w') as f:
+#    pd.DataFrame(adjacency_matrix).to_csv(csv_file_path, index=False)
  
 # Read the adjacency matrix from the CSV file and visualize it
-#read_csv_file_path = '/Users/jamesleon/Documents/GitHub/DataMiningProjects/PageRank/final_matrix.csv'
-#adjacency_matrix = pd.read_csv(read_csv_file_path).values
-#visualize_adjacency_matrix(adjacency_matrix)
+read_csv_file_path = '/Users/jamesleon/Documents/GitHub/DataMiningProjects/PageRank/final_matrix.csv'
+adjacency_matrix = pd.read_csv(read_csv_file_path).values
+visualize_adjacency_matrix(adjacency_matrix)

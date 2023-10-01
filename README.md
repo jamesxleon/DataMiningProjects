@@ -1,61 +1,76 @@
-# Proyecto 2: Page Ranking Simulation
+# Proyecto 4 : Feature Selection
+## Simulated Annealing (SA) + Symmetrical Uncertainty
 
-## Power Iterarion & Random Walker
+### The work has been divided in sections to be considered as follows:
 
-### Notes:
+## 1. Data Preprocessing (James)
 
-`PageRank` is the active project.
+**Objective**
 
-### GraphCreation Folder
+To normalize the dataset so that the features are scaled within a specific range.
 
-**This is a code to generate a random NxN adjacency matrix (now set to N=10) with a given number of dead ends and spider traps (now set to 3 for each, a total of 6 traps)**
+**Steps to Implement**
+- Load the dataset using pandas.read_csv().
+- Apply Min-Max scaling to normalize the features.
 
-## Outcoming Work
+**Need to know for the defense!**
+- Understanding Min-Max scaling and its effect on the dataset.
 
-### Power Iteration (Sebastián & Nicole)
+## 2. _**Feature Selection Method: Simulated Annealing + Symmetrical Uncertainty**_ (Nico & Daniel, this will be a real challenge, so le the faith of the gods be with you)
 
-- You'll be creating the ranking r vector representing the convergency of the importance for a given i web page given the M matrix read from a CSV
+**Objective**
 
-### Random Walker (Nicolás & Daniel)
+To implement a feature selection algorithm using Simulated Annealing combined with Symmetrical Uncertainty as the objective function.
 
-- You'll be creating the p(t) vector representing the out probability from each page
-- This should lead to a stationary probability
+**Steps to Implement**
+- Implement the Simulated Annealing algorithm.
+- Define Symmetrical Uncertainty as the objective function.
+- Use Simulated Annealing to select feature subsets based on Symmetrical Uncertainty.
 
-### Synchronization (James)
+**Need to know for the defense!**
+- Understand the Simulated Annealing algorithm, its parameters, and how it works for optimization problems.
+- Familiarize yourself with the Symmetrical Uncertainty metric and how it measures the relevance of features.
 
-- Once both algorithms are up and running, I'll make them work side-by-side
+## 3. Top Five Feature Subsets (Nicky, on this depends the rest of the semester so beware)
 
-### Check Global convergence or termination conditions (Sebastián & Nicole)
+**Objective**
 
-- You'll be suggesting the termination conditions for the rank and implementing it
+To identify the top five feature subsets based on their per capita importance.
 
-### Post processing (Nicolás & Daniel)
+**Steps to Implement**
 
-- Do the teleportation matrix and save the results
+- Use the Simulated Annealing algorithm to generate a list of promising feature subsets.
+- Calculate the per capita importance for each feature subset.
 
-# A Guidance on how to advance within each step is provided in the MatrixProcessing.py file  
+**Need to know for the defense!**
+- Understand the concept of per capita importance and how to calculate it.
 
-**Here's how I'd do each step of the process, btw**  
+## 4. AUC Score-based Ranking (Sebas, this one should be pretty easy actually, so you owe us one)
 
-**Random Walker**
-The idea of a Random Walker is to simulate a random walk through the graph. At each node i, the walker will move to one of its neighbors randomly, as specified by the adjacency matrix.
+**Objective**
 
-Here's a guide to implementing this:
+To rank the top five feature subsets based on their AUC (Area Under the Curve) scores.
 
-Move Through Graph: Given the current node, identify its outlinks from the adjacency matrix. Move to one of these outlinked nodes randomly.
+**Steps to Implement**
+- Use a classification model (e.g., logistic regression, SVM, etc.) to evaluate the AUC score for each of the top five feature subsets.
+- Rank the subsets based on their AUC scores.
 
-Update State: Update the state vector to reflect the current position of the random walker.  
+**Need to know for the defense!**
+- Understanding the AUC metric and how it is used to evaluate classification models.
+- Familiarize yourself with ROC (Receiver Operating Characteristic) curves.
 
-Visited Nodes: Keep a list of visited nodes. This will help you track where the walker has been and will be useful for the termination condition.  
+## 5. Interpretation and Conclusion (James)
 
-**Power Iteration**
-Power Iteration is used to find the dominant eigenvector of the adjacency matrix, which, in this context, represents the PageRank score.
+**Objective**
 
-Normalize Columns: Before applying power iteration, make sure to normalize the columns of the adjacency matrix so that they sum to 1. This creates a stochastic matrix.  
+To interpret the results and conclude the study.
 
-Iterate: Apply the power iteration update rule: P_new=Matrix × P_old  
+**Steps to Implement**
+- Discuss the per capita importance and its implications.
+- Interpret the AUC scores for the feature subsets.
+- Conclude the study, noting any limitations and suggesting avenues for future work.
 
-Normalize: Normalize the new P so it sums to 1.(You can choose wheter to use L1 norm or L2 norm here, but make sure to have some reason to support your decision)  
+**Need to know for the defense!**
+- Methods for interpreting AUC scores and per capita importance.
+- Limitations of using Simulated Annealing and Symmetrical Uncertainty for feature selection.
 
-**Synchronization**
-Once you have both algorithms working independently, you can synchronize them within the main loop. The idea is to run one step of each algorithm per iteration of the loop, printing or storing the states at each step.
